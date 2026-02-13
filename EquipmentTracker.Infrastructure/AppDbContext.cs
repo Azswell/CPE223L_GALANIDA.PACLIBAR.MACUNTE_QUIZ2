@@ -1,16 +1,28 @@
-﻿// AppDbContext.cs
-using EquipmentTracker.Domain;
+﻿using EquipmentTracker.Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-public class AppDbContext : DbContext
+namespace EquipmentTracker.Infrastructure
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-    public DbSet<Equipment> Equipments { get; set; }
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-{
-    public class AppDbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=AppDbReleased;Integrated Security=True;TrustServerCertificate=True;");
+        public AppDbContext()
+        {
         }
+
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                
+                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=AppDbReleased;Integrated Security=True;TrustServerCertificate=True;");
+            }
+        }
+
+        public DbSet<Equipment> Equipments { get; set; }
     }
 }
